@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-dark: #0056b3;
+            --background-color: #f4f4f4;
+            --form-background: #fff;
+            --border-color: #ddd;
+            --text-color: #333;
+            --button-padding: 12px 16px;
+            --border-radius: 6px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --max-width: 600px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: var(--text-color);
+            margin-bottom: 0.5em;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--text-color);
+            margin-bottom: 1em;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        form {
+            background: var(--form-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1em;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5em;
+            font-weight: bold;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: var(--button-padding);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 16px;
+            transition: text-decoration 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Style the icons within the labels */
+        .form-group label i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        button i {
+            margin-right: 8px;
+        }
+
+        a i {
+            margin-right: 8px;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
+
+            .form-group {
+                margin-bottom: 1.2em;
+            }
+
+            button {
+                padding: 10px 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2em;
+            }
+
+            h2 {
+                font-size: 1em;
+            }
+
+            .form-group {
+                margin-bottom: 1.5em;
+            }
+
+            button {
+                padding: 8px 12px;
+            }
+
+            .form-group textarea {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <h2>Upload File</h2>
+    <form action="/admin/upload" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">
+                <i class="fas fa-heading"></i> Title:
+            </label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="purpose">
+                <i class="fas fa-pencil-alt"></i> Purpose:
+            </label>
+            <textarea id="purpose" name="purpose" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="language">
+                <i class="fas fa-globe"></i> Language:
+            </label>
+            <input type="text" id="language" name="language" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="fileUpload">
+                <i class="fas fa-file-upload"></i> File:
+            </label>
+            <input type="file" id="fileUpload" name="fileUpload" required>
+        </div>
+        
+        <button type="submit">
+            <i class="fas fa-upload"></i> Upload
+        </button>
+    </form>
+    <a href="/files">
+        <i class="fas fa-eye"></i> View Files
+    </a>
+</body>
+</html>
