@@ -11,11 +11,11 @@ const cookieParser = require('cookie-parser'); // Middleware for handling cookie
 const app = express();
 const port = 2000;
 
-// Hardcoded MySQL connection setup
+// MySQL connection setup
 const db = mysql.createConnection({
     host: 'localhost',
-    user: 'root',        // Replace with your MySQL username
-    password: '123456789',        // Replace with your MySQL password
+    user: 'root',
+    password: '123456789',
     database: 'file_upload'
 });
 
@@ -28,8 +28,8 @@ db.connect(err => {
     console.log('Connected to MySQL database');
 });
 
-// Hardcoded secret key for JWT
-const SECRET_KEY = 'your_jwt_secret_key'; // Replace with your secret key
+// JWT secret key
+const SECRET_KEY = 'your_jwt_secret_key';
 
 // Multer setup for file handling (disk storage)
 const uploadPath = path.join(__dirname, 'uploads');
@@ -59,8 +59,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Authentication middleware
 const authenticateToken = (req, res, next) => {
-    const token = req.cookies.token; // Expect token in cookies
-    if (token == null) return res.sendStatus(401); // No token
+    const token = req.cookies.token;
+    if (!token) return res.sendStatus(401); // No token
 
     jwt.verify(token, SECRET_KEY, (err, user) => {
         if (err) return res.sendStatus(403); // Invalid token
@@ -104,7 +104,7 @@ app.post('/admin/login', (req, res) => {
             }
 
             const token = jwt.sign({ id: admin.id, role: 'admin' }, SECRET_KEY, { expiresIn: '1h' });
-            res.cookie('token', token, { httpOnly: true });
+            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
             res.redirect('/admin/home');
         });
     });
@@ -125,7 +125,11 @@ app.post('/admin/register', (req, res) => {
 
 app.get('/admin/home', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') return res.sendStatus(403); // Forbidden for non-admins
-    res.render('home'); // Ensure 'home.ejs' exists in the 'views' folder
+    const query = 'SELECT id, title, purpose, language, filename FROM files';
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).send('Database error.');
+        res.render('home', { files: results }); // Ensure 'home.ejs' exists in the 'views' folder
+    });
 });
 
 app.post('/admin/upload', authenticateToken, upload.single('fileUpload'), (req, res) => {
@@ -151,7 +155,7 @@ app.post('/user/login', (req, res) => {
         bcrypt.compare(password, user.password, (err, match) => {
             if (err || !match) return res.status(400).send('Invalid credentials.');
             const token = jwt.sign({ id: user.id, role: 'user' }, SECRET_KEY, { expiresIn: '1h' });
-            res.cookie('token', token, { httpOnly: true });
+            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
             res.redirect('/files');
         });
     });
@@ -174,10 +178,70 @@ app.get('/files', authenticateToken, (req, res) => {
     const query = 'SELECT id, title, purpose, language, filename, upload_date FROM files';
     db.query(query, (err, results) => {
         if (err) return res.status(500).send('Database error.');
-        res.render('files', { files: results }); // Ensure 'files.ejs' exists in the 'views' folder
+        res.render('files', { 
+            files: results,
+            userRole: req.user.role // Pass the user's role to the EJS template
+        });
     });
 });
 
+app.get('/files/edit/:id', authenticateToken, (req, res) => {
+    const fileId = req.params.id;
+    const query = 'SELECT * FROM files WHERE id = ?';
+    db.query(query, [fileId], (err, results) => {
+        if (err) return res.status(500).send('Database error.');
+        if (results.length === 0) return res.status(404).send('File not found.');
+        res.render('edit-file', { file: results[0] }); // Ensure 'edit-file.ejs' exists in the 'views' folder
+    });
+});
+
+app.post('/files/edit/:id', authenticateToken, upload.single('fileUpload'), (req, res) => {
+    const fileId = req.params.id;
+    const { title, purpose, language } = req.body;
+    let query = 'UPDATE files SET title = ?, purpose = ?, language = ?';
+    const queryParams = [title, purpose, language];
+
+    if (req.file) {
+        query += ', filename = ?, file_path = ?';
+        queryParams.push(req.file.originalname, req.file.filename);
+    }
+
+    query += ' WHERE id = ?';
+    queryParams.push(fileId);
+
+    db.query(query, queryParams, (err) => {
+        if (err) return res.status(500).send('Database error.');
+        res.redirect('/files');
+    });
+});
+
+app.post('/files/delete/:id', authenticateToken, (req, res) => {
+    const fileId = req.params.id;
+
+    // Fetch the file info to remove the file from disk
+    const query = 'SELECT filename FROM files WHERE id = ?';
+    db.query(query, [fileId], (err, results) => {
+        if (err) return res.status(500).send('Database error.');
+        if (results.length === 0) return res.status(404).send('File not found.');
+
+        const fileName = results[0].filename;
+        const filePath = path.join(uploadPath, fileName);
+
+        // Remove file from the disk
+        fs.unlink(filePath, (err) => {
+            if (err) return res.status(500).send('File deletion error.');
+
+            // Remove file record from the database
+            const deleteQuery = 'DELETE FROM files WHERE id = ?';
+            db.query(deleteQuery, [fileId], (err) => {
+                if (err) return res.status(500).send('Database error.');
+                res.redirect('/files');
+            });
+        });
+    });
+});
+
+// File download route
 app.get('/uploads/:filename', authenticateToken, (req, res) => {
     const fileName = req.params.filename;
     const filePath = path.join(uploadPath, fileName);
@@ -191,6 +255,17 @@ app.get('/uploads/:filename', authenticateToken, (req, res) => {
     } else {
         res.status(404).send('File not found.');
     }
+});
+app.get('/admin-list-file', authenticateToken, (req, res) => {
+    // Query the database for files, or any other logic
+    const query = 'SELECT id, title, purpose, language, filename FROM files';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).send('Database error.');
+        }
+        res.render('admin-list-file', { files: results }); // Ensure 'admin-list-file.ejs' exists in the 'views' folder
+    });
 });
 
 // Start the server

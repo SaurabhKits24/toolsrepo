@@ -27,22 +27,34 @@
             background: #ffffff;
             margin-bottom: 15px;
             padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             gap: 15px;
             justify-content: space-between;
         }
-        .file-icon {
-            font-size: 24px;
-            color: #007bff;
+        .file-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            object-fit: cover;
+            background-color: #e9ecef; /* Fallback background color */
         }
         .file-details {
             flex: 1;
+            margin-right: 15px;
         }
         .file-details strong {
             color: #007bff;
+        }
+        .file-details .label {
+            font-weight: bold;
+            color: #343a40; /* Dark color for labels */
+        }
+        .file-details p {
+            margin: 10px 0; /* Space around the paragraph */
+            color: #6c757d; /* Lighter color for description text */
         }
         .file-details span {
             display: block;
@@ -91,21 +103,23 @@
     <ul>
         <% files.forEach(file => { %>
             <li>
-                <!-- Example icon based on file type, adjust as needed -->
-                <i class="file-icon fas fa-file-alt" aria-label="File icon"></i>
+                <!-- Replace with a thumbnail if available -->
+                <% if (file.thumbnail) { %>
+                    <img src="/thumbnails/<%= file.thumbnail %>" alt="Thumbnail for <%= file.title %>" class="file-thumbnail">
+                <% } else { %>
+                    <img src="/images/placeholder.png" alt="Placeholder thumbnail" class="file-thumbnail">
+                <% } %>
                 <div class="file-details">
                     <strong><%= file.title %></strong> (<%= file.language %>)<br>
-                    <%= file.purpose %></strong> <br>
-                     <% 
-                     const uploadDate = new Date(file.upload_date);
-                     const formattedDate = uploadDate.getFullYear() + '-' + 
-                                           String(uploadDate.getMonth() + 1).padStart(2, '0') + '-' + 
-                                           String(uploadDate.getDate()).padStart(2, '0');
-                   %>
-                   
-                   <%= formattedDate %>
-                   <br>
-                    <span>File Name: <%= file.filename %></span><br>
+                    <p><%= file.purpose %></p> <!-- Description as a paragraph -->
+                    <% 
+                    const uploadDate = new Date(file.upload_date);
+                    const formattedDate = uploadDate.getFullYear() + '-' + 
+                                          String(uploadDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                                          String(uploadDate.getDate()).padStart(2, '0');
+                    %>
+                    <span class="label">Uploaded on:</span> <%= formattedDate %><br>
+                    <span class="label">File Name:</span> <%= file.filename %><br>
                     <a href="/uploads/<%= file.filename %>" class="download-button" aria-label="Download <%= file.title %>">
                         <i class="fas fa-download"></i> Download
                     </a>

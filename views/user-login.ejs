@@ -4,76 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9; /* Light background color */
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column; /* Stack header and container vertically */
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
-        h1 {
-            color: #333;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            box-sizing: border-box;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        a {
-            display: block;
-            margin-top: 10px;
+
+        .header {
+            font-size: 36px; /* Larger font-size for the header */
+            color: #333; /* Dark color for the header */
+            margin-bottom: 40px; /* Space between header and form */
             text-align: center;
-            color: #007bff;
-            text-decoration: none;
         }
-        a:hover {
+
+        form {
+            background-color: #ffffff;
+            padding: 40px; /* Increased padding */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            width: 100%;
+            max-width: 400px; /* Set maximum width */
+            box-sizing: border-box;
+            position: relative; /* To position icons correctly */
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px; /* Space between form fields */
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 48px; /* Increased padding */
+            border: 1px solid #ddd; /* Light border color */
+            border-radius: 6px; /* Rounded corners */
+            font-size: 18px; /* Larger font-size */
+            box-sizing: border-box;
+        }
+
+        .form-group .icon {
+            position: absolute;
+            left: 12px; /* Positioning of the icon */
+            font-size: 24px; /* Larger icon size */
+            color: #007bff; /* Consistent color */
+        }
+
+        .form-group .show-password {
+            position: absolute;
+            right: 12px; /* Positioning of the show/hide icon */
+            cursor: pointer;
+            font-size: 24px; /* Larger icon size */
+            color: #007bff; /* Consistent color */
+        }
+
+        button {
+            width: 100%;
+            padding: 16px; /* Increased padding */
+            background-color: #007bff; /* Primary color */
+            border: none;
+            border-radius: 6px; /* Rounded corners */
+            color: #ffffff;
+            font-size: 18px; /* Larger font-size */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Slightly darker color on hover */
+        }
+
+        .links {
+            margin-top: 20px; /* Spacing above the links */
+            text-align: center;
+        }
+
+        .links a {
+            display: block;
+            color: #007bff; /* Consistent color */
+            text-decoration: none;
+            font-size: 16px; /* Larger font-size */
+            margin: 8px 0; /* Spacing between links */
+            transition: color 0.3s ease;
+        }
+
+        .links a:hover {
+            color: #0056b3; /* Slightly darker color on hover */
             text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                font-size: 28px; /* Adjusted font-size for smaller screens */
+            }
+
+            form {
+                padding: 20px; /* Reduced padding */
+            }
+
+            .form-group input {
+                padding: 12px 36px; /* Adjusted padding */
+                font-size: 16px; /* Adjusted font-size */
+            }
+
+            button {
+                padding: 12px; /* Adjusted padding */
+                font-size: 16px; /* Adjusted font-size */
+            }
+
+            .links a {
+                font-size: 14px; /* Adjusted font-size */
+            }
         }
     </style>
 </head>
 <body>
-    <h1>User Login</h1><br>
+    <div class="header">User Login</div>
     <form action="/user/login" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
+        <div class="form-group">
+            <i class="fas fa-user icon"></i>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <i class="fas fa-lock icon"></i>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <i class="fas fa-eye show-password" id="togglePassword"></i>
+        </div>
+        <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
     </form>
-    <br><a href="/user/register">Register as User</a>
-    <br><a href="/admin/login">Admin Login</a>
+    <div class="links">
+        <a href="/user/register">Register as User</a>
+        <a href="/admin/login">Admin Login</a>
+    </div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('togglePassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
 </body>
 </html>

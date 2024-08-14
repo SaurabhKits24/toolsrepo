@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded Files</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .card h2 {
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #ffffff;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .file-icon {
+            font-size: 24px;
+            color: #007bff;
+        }
+        .file-details {
+            flex: 1;
+            margin-right: 15px;
+        }
+        .file-details strong {
+            color: #007bff;
+        }
+        .file-details span {
+            display: block;
+            margin-top: 5px;
+            color: #6c757d;
+        }
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        a, button {
+            display: flex;
+            align-items: center;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        a:hover, button:hover {
+            text-decoration: underline;
+        }
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            color: #007bff;
+            font-size: 14px;
+        }
+        button:focus {
+            outline: none;
+        }
+        .download-button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #007bff;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .actions i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stored Files</h1>
+    <div class="card">
+        <h2>Uploaded Files</h2>
+        <ul class="files-list">
+            <% files.forEach(file => { %>
+                <li>
+                    <div class="file-details">
+                        <strong><%= file.title %></strong> - <%= file.purpose %> (Language: <%= file.language %>)
+                    </div>
+                    <div class="actions">
+                        <a class="download-button" href="/uploads/<%= file.filename %>"><i class="fas fa-download"></i> Download</a>
+                        <a href="/files/edit/<%= file.id %>"><i class="fas fa-edit"></i> Edit</a>
+                        <form action="/files/delete/<%= file.id %>" method="post">
+                            <button type="submit"><i class="fas fa-trash-alt"></i> Delete</button>
+                        </form>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+    
+    <a class="back-link" href="/admin/home">Back to Upload Form</a>
+</body>
+</html>

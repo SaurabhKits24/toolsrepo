@@ -4,76 +4,258 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-        }
-        h1 {
-            color: #333;
-        }
-        form {
-            background-color: #fff;
+            margin: 0;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            box-sizing: border-box;
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        a {
-            display: block;
-            margin-top: 10px;
+
+        .header {
             text-align: center;
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 48px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .form-group .icon, .form-group .password-toggle {
+            position: absolute;
+            font-size: 20px;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        .form-group .icon {
+            left: 12px;
+        }
+
+        .form-group .password-toggle {
+            right: 12px;
+            cursor: pointer;
+        }
+
+        .form-group .password-toggle.fa-lock {
+            color: #28a745; /* Green color for locked (secured) */
+        }
+
+        .form-group .password-toggle.fa-lock-open {
+            color: #dc3545; /* Red color for unlocked (not secured) */
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .links a {
+            display: block;
             color: #007bff;
             text-decoration: none;
+            font-size: 14px;
+            margin: 8px 0;
+            transition: color 0.3s ease;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .links a:hover {
+            color: #0056b3;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: opacity 0.3s ease;
+        }
+
+        .error-message.hidden {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                font-size: 28px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            .form-group input {
+                padding: 10px 36px;
+                font-size: 14px;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .links a {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>User Register</h1>
-    <form action="/user/register" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Register</button>
-    </form>
-    <a href="/user/login">Login as User</a>
-    <a href="/admin/login">Admin Login</a>
+    <div class="header">User Register</div>
+    <div class="container">
+        <h1>Register</h1>
+        <form id="registerForm" action="/user/register" method="post">
+            <div class="form-group">
+                <i class="fas fa-user icon"></i>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <i class="fas fa-lock password-toggle" id="togglePassword" title="Toggle Password Visibility"></i>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                <i class="fas fa-lock password-toggle" id="toggleConfirmPassword" title="Toggle Password Visibility"></i>
+            </div>
+            <div id="error-message" class="error-message hidden"></div>
+            <button type="submit"><i class="fas fa-user-plus"></i> Register</button>
+        </form>
+        <div class="links">
+            <a href="/login">Login</a>
+            <a href="/forgot-password">Forgot Password?</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('togglePassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-lock');
+                passwordIcon.classList.add('fa-lock-open');
+                passwordIcon.title = 'Password is visible';
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-lock-open');
+                passwordIcon.classList.add('fa-lock');
+                passwordIcon.title = 'Password is hidden';
+            }
+        });
+
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const confirmPasswordIcon = document.getElementById('toggleConfirmPassword');
+
+            if (confirmPasswordInput.type === 'password') {
+                confirmPasswordInput.type = 'text';
+                confirmPasswordIcon.classList.remove('fa-lock');
+                confirmPasswordIcon.classList.add('fa-lock-open');
+                confirmPasswordIcon.title = 'Password is visible';
+            } else {
+                confirmPasswordInput.type = 'password';
+                confirmPasswordIcon.classList.remove('fa-lock-open');
+                confirmPasswordIcon.classList.add('fa-lock');
+                confirmPasswordIcon.title = 'Password is hidden';
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match';
+                errorMessage.classList.remove('hidden');
+                event.preventDefault(); // Prevent form submission
+            } else {
+                errorMessage.textContent = ''; // Clear error message if passwords match
+                errorMessage.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -4,75 +4,221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #e9ecef;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8; /* Lighter background color */
             display: flex;
+            flex-direction: column; /* Align elements vertically */
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-        }
-        h1 {
-            color: #343a40;
-            margin-bottom: 20px;
-        }
-        form {
-            background: #ffffff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 300px;
+            position: relative; /* Allow header positioning relative to body */
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #495057;
+
+        .header {
+            text-align: center;
+            font-size: 32px; /* Font-size for header */
+            color: #333; /* Darker color for contrast */
+            margin-bottom: 40px; /* Space between header and container */
         }
-        input[type="text"], input[type="password"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-        }
-        button {
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
             width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            border: none;
-            border-radius: 4px;
-            color: #ffffff;
-            font-size: 16px;
+            background: #ffffff;
+            border-radius: 8px; /* Lighter border-radius */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            padding: 30px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Allow scrolling if content overflows */
+        }
+
+        h1 {
+            font-size: 28px; /* Slightly smaller font-size */
+            margin-bottom: 20px; /* Reduced margin */
+            color: #333; /* Darker color for better readability */
+            text-align: center;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px; /* Reduced margin */
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 48px; /* Adjusted padding */
+            border: 1px solid #ccc; /* Lighter border color */
+            border-radius: 6px; /* Slightly lighter border-radius */
+            font-size: 16px; /* Reduced font-size */
+            box-sizing: border-box;
+        }
+
+        .form-group .icon, .form-group .show-password {
+            position: absolute;
+            font-size: 20px; /* Smaller icon size */
+            color: #007bff; /* Consistent color */
+        }
+
+        .form-group .icon {
+            left: 12px; /* Adjusted position */
+        }
+
+        .form-group .show-password {
+            right: 12px;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #218838;
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff; /* Primary color */
+            border: none;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 16px; /* Consistent font-size */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px; /* Adjusted margin */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        a {
-            display: block;
+
+        button i {
+            margin-right: 8px; /* Adjusted margin */
+            font-size: 20px; /* Smaller button icon size */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Slightly darker on hover */
+        }
+
+        .links {
+            margin-top: 20px; /* Consistent margin */
             text-align: center;
-            margin-top: 15px;
+        }
+
+        .links a {
+            display: block;
             color: #007bff;
             text-decoration: none;
+            font-size: 14px; /* Consistent font-size */
+            margin: 8px 0; /* Adjusted margin */
+            transition: color 0.3s ease;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .links a:hover {
+            color: #0056b3; /* Slightly darker on hover */
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                font-size: 28px; /* Adjusted for smaller screens */
+            }
+
+            .container {
+                padding: 20px; /* Reduced padding */
+            }
+
+            h1 {
+                font-size: 24px; /* Smaller font-size */
+                margin-bottom: 15px; /* Reduced margin */
+            }
+
+            .form-group input {
+                padding: 10px 36px; /* Adjusted padding */
+                font-size: 14px; /* Smaller font-size */
+            }
+
+            button {
+                padding: 10px; /* Adjusted padding */
+                font-size: 14px; /* Smaller font-size */
+            }
+
+            .links a {
+                font-size: 12px; /* Smaller font-size */
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Admin Register</h1>
-    <form action="/admin/register" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Register</button>
-    </form>
-    <a href="/admin/login">Login as Admin</a>
-    <a href="/user/login">User Login</a>
+    <div class="header">Admin Register</div>
+    <div class="container">
+        <h1>Register</h1>
+        <form id="registerForm" action="/admin/register" method="post">
+            <div class="form-group">
+                <i class="fas fa-user icon"></i>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <i class="fas fa-eye show-password" id="togglePassword"></i>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm Password" required>
+                <i class="fas fa-eye show-password" id="togglePasswordConfirm"></i>
+            </div>
+            <button type="submit"><i class="fas fa-user-plus"></i> Register</button>
+        </form>
+        <div class="links">
+            <a href="/admin/login">Login as Admin</a>
+            <a href="/user/login">User Login</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('togglePassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        });
+
+        document.getElementById('togglePasswordConfirm').addEventListener('click', function () {
+            const passwordConfirmInput = document.getElementById('passwordConfirm');
+            const passwordConfirmIcon = document.getElementById('togglePasswordConfirm');
+
+            if (passwordConfirmInput.type === 'password') {
+                passwordConfirmInput.type = 'text';
+                passwordConfirmIcon.classList.remove('fa-eye');
+                passwordConfirmIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordConfirmInput.type = 'password';
+                passwordConfirmIcon.classList.remove('fa-eye-slash');
+                passwordConfirmIcon.classList.add('fa-eye');
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('passwordConfirm').value;
+
+            if (password !== passwordConfirm) {
+                event.preventDefault(); // Prevent form submission
+                alert('Passwords do not match!');
+            }
+        });
+    </script>
 </body>
 </html>

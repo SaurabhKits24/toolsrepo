@@ -14,13 +14,13 @@
             --border-color: #ddd;
             --text-color: #333;
             --button-padding: 12px 16px;
-            --border-radius: 6px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --max-width: 600px;
+            --border-radius: 8px;
+            --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --max-width: 700px;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-color);
             margin: 0;
             padding: 0;
@@ -29,51 +29,66 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
+            position: relative; /* Contain absolutely positioned elements */
+        }
+
+        h1, h2 {
+            color: var(--text-color);
+            margin: 0;
+            text-align: center;
         }
 
         h1 {
-            color: var(--text-color);
+            font-size: 2.5em;
             margin-bottom: 0.5em;
-            font-size: 2em;
-            text-align: center;
+            padding-top: 20px; /* Added padding to ensure space from the top */
         }
 
         h2 {
-            color: var(--text-color);
+            font-size: 1.8em;
             margin-bottom: 1em;
-            font-size: 1.5em;
-            text-align: center;
         }
 
-        form {
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            padding-top: 60px; /* Ensure space for the header */
+        }
+
+        .card {
             background: var(--form-background);
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             padding: 20px;
-            width: 100%;
-            max-width: var(--max-width);
-            margin: 0 auto;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            margin-bottom: 1em;
         }
 
         .form-group label {
             margin-bottom: 0.5em;
-            font-weight: bold;
+            font-weight: 600;
             color: var(--text-color);
             display: flex;
             align-items: center;
+            gap: 8px;
         }
 
         .form-group input[type="text"],
         .form-group textarea,
         .form-group input[type="file"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             box-sizing: border-box;
@@ -81,7 +96,7 @@
 
         .form-group textarea {
             resize: vertical;
-            height: 120px;
+            height: 150px;
         }
 
         button {
@@ -92,48 +107,87 @@
             border-radius: var(--border-radius);
             cursor: pointer;
             font-size: 16px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
         }
 
         button:hover {
             background-color: var(--primary-dark);
+            transform: scale(1.02);
         }
 
         a {
-            display: inline-block;
-            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
             color: var(--primary-color);
             text-decoration: none;
-            font-size: 16px;
+            font-size: 18px; /* Increased font size */
             transition: text-decoration 0.3s ease;
-            display: flex;
-            align-items: center;
+            gap: 8px;
+            position: absolute;
+            top: 20px; /* Position from the top */
+            right: 20px; /* Position from the right */
         }
 
         a:hover {
             text-decoration: underline;
         }
 
-        /* Style the icons within the labels */
-        .form-group label i {
-            margin-right: 8px;
+        .files-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .files-list li {
+            background: var(--form-background);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .files-list li a {
             color: var(--primary-color);
         }
 
-        button i {
-            margin-right: 8px;
+        .files-list li a:hover {
+            text-decoration: underline;
         }
 
-        a i {
-            margin-right: 8px;
+        .files-list button {
+            background-color: #dc3545;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
 
-        /* Media Queries for Responsive Design */
+        .files-list button:hover {
+            background-color: #c82333;
+        }
+
         @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
             h1 {
                 font-size: 1.5em;
             }
@@ -142,76 +196,55 @@
                 font-size: 1.2em;
             }
 
-            .form-group {
-                margin-bottom: 1.2em;
-            }
-
-            button {
-                padding: 10px 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.2em;
-            }
-
-            h2 {
-                font-size: 1em;
-            }
-
-            .form-group {
-                margin-bottom: 1.5em;
-            }
-
-            button {
-                padding: 8px 12px;
-            }
-
             .form-group textarea {
-                height: 100px;
+                height: 120px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>Admin Panel</h1>
-    <h2>Upload File</h2>
-    <form action="/admin/upload" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="title">
-                <i class="fas fa-heading"></i> Title:
-            </label>
-            <input type="text" id="title" name="title" required>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <div class="card">
+            <h2>Upload File</h2>
+            <form action="/admin/upload" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">
+                        <i class="fas fa-heading"></i> Title:
+                    </label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="purpose">
+                        <i class="fas fa-pencil-alt"></i> Purpose:
+                    </label>
+                    <textarea id="purpose" name="purpose" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="language">
+                        <i class="fas fa-globe"></i> Language:
+                    </label>
+                    <input type="text" id="language" name="language" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fileUpload">
+                        <i class="fas fa-file-upload"></i> File:
+                    </label>
+                    <input type="file" id="fileUpload" name="fileUpload" required>
+                </div>
+                
+                <button type="submit">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+            </form>
         </div>
-        
-        <div class="form-group">
-            <label for="purpose">
-                <i class="fas fa-pencil-alt"></i> Purpose:
-            </label>
-            <textarea id="purpose" name="purpose" required></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="language">
-                <i class="fas fa-globe"></i> Language:
-            </label>
-            <input type="text" id="language" name="language" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="fileUpload">
-                <i class="fas fa-file-upload"></i> File:
-            </label>
-            <input type="file" id="fileUpload" name="fileUpload" required>
-        </div>
-        
-        <button type="submit">
-            <i class="fas fa-upload"></i> Upload
-        </button>
-    </form>
-    <a href="/files">
-        <i class="fas fa-eye"></i> View Files
-    </a>
+
+        <a href="/admin-list-file">
+            <i class="fas fa-eye"></i> View Files
+        </a>
+    </div>
 </body>
 </html>
